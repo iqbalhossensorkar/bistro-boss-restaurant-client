@@ -9,3 +9,11 @@
 .carousel .thumb {
     @apply mx-2;
 }
+
+.swiper-container {
+    position: relative;
+  }
+  
+  .swiper-pagination {
+    @apply absolute bottom-4 left-1/2 transform -translate-x-1/2;
+  }
