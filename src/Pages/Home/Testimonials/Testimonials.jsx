@@ -12,10 +12,10 @@ import { FaQuoteLeft } from "react-icons/fa";
 const Testimonials = () => {
     const [reviews, setReviews] = useState([]);
     useEffect(() => {
-        fetch('reviews.json')
+        fetch('http://localhost:5000/review')
             .then(res => res.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 setReviews(data)
             })
     }, [])

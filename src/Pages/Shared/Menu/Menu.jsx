@@ -2,7 +2,7 @@
 
 const Menu = ({ item }) => {
     const { image, name, price, recipe } = item;
-    console.log(item);
+    // console.log(item);
     return (
         <div className="flex mb-10 items-center">
             <div className="flex items-start">

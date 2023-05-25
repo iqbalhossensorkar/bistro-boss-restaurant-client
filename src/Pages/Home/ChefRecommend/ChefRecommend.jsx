@@ -10,7 +10,7 @@ const ChefRecommend = () => {
                     <h2 className="text-xl font-bold">Caeser Salad</h2>
                     <p>If a dog chews shoes whose shoes does he choose?</p>
                     <div className="card-actions justify-center">
-                        <button className="btn btn-outline border-0 border-b-4 text-yellow-600 hover:text-yellow-600 hover:border-none">Add to cart</button>
+                        <button className="btn btn-outline border-0 border-b-4 text-yellow-600 hover:text-yellow-600 hover:border-none bg-[#E8E8E8]">Add to cart</button>
                     </div>
                 </div>
             </div>
@@ -20,7 +20,7 @@ const ChefRecommend = () => {
                     <h2 className="text-xl font-bold">Caeser Salad</h2>
                     <p>If a dog chews shoes whose shoes does he choose?</p>
                     <div className="card-actions justify-center">
-                        <button className="btn btn-outline border-0 border-b-4 text-yellow-600 hover:text-yellow-600 hover:border-none">Add to cart</button>
+                        <button className="bg-[#E8E8E8] btn btn-outline border-0 border-b-4 text-yellow-600 hover:text-yellow-600 hover:border-none">Add to cart</button>
                     </div>
                 </div>
             </div>
@@ -30,7 +30,7 @@ const ChefRecommend = () => {
                     <h2 className="text-xl font-bold">Caeser Salad</h2>
                     <p>If a dog chews shoes whose shoes does he choose?</p>
                     <div className="card-actions justify-center">
-                        <button className="btn btn-outline border-0 border-b-4 text-yellow-600 hover:text-yellow-600 hover:border-none">Add to cart</button>
+                        <button className="bg-[#E8E8E8] btn btn-outline border-0 border-b-4 text-yellow-600 hover:text-yellow-600 hover:border-none">Add to cart</button>
                     </div>
                 </div>
             </div>
