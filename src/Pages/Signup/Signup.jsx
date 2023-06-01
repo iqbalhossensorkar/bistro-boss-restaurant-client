@@ -1,15 +1,22 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../Provider/AuthProvider";
 import { FaFacebookF } from "react-icons/fa";
 import { IoLogoGoogle } from "react-icons/io";
 import { GoMarkGithub } from "react-icons/go";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import background from '../../assets/others/authentication.png'
 import auth from '../../assets/others/authentication2.png'
+import Swal from "sweetalert2";
+import { updateProfile } from "firebase/auth";
 
 
 const Signup = () => {
+    // eslint-disable-next-line no-unused-vars
+    const [userName, setUserName] = useState('');
     const { githubSignIn, facebookSignIn, googleSignIn, createUser } = useContext(AuthContext)
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location?.state?.form?.pathname || '/'
     const handleSignup = (event) => {
         event.preventDefault();
         const form = event.target;
@@ -20,17 +27,25 @@ const Signup = () => {
         createUser(email, password)
             .then(res => {
                 const loggedUser = res.user;
+                handleUpdate(loggedUser, name)
                 console.log(loggedUser);
+                Swal.fire(
+                    'Good job!',
+                    'Account created successfully!',
+                    'success'
+                )
+                navigate(from, {replace: true })
             }).catch(error => {
                 console.log('error', error.message);
             })
     }
-    
+
     const handleGoogle = () => {
         googleSignIn()
             .then(res => {
                 const googlelog = res.user;
                 console.log(googlelog);
+                navigate(from, {replace: true })
             }).catch(error => {
                 console.log('error', error.message);
             })
@@ -40,6 +55,7 @@ const Signup = () => {
             .then(res => {
                 const facebooklog = res.user;
                 console.log(facebooklog);
+                navigate(from, {replace: true })
             }).catch(error => {
                 console.log('error', error.message);
             })
@@ -49,9 +65,23 @@ const Signup = () => {
             .then(res => {
                 const githublog = res.user;
                 console.log(githublog);
+                navigate(from, {replace: true })
             }).catch(error => {
                 console.log('error', error.message);
             })
+    }
+    const handleUpdate = (result, name,
+        // photoURL
+    ) => {
+        updateProfile(result, {
+            displayName: name
+        })
+            .then(() => {
+                console.log(result.displayName);
+                setUserName(result.displayName);
+            }).catch((error) => {
+                console.log(error.message);
+            });
     }
     return (
         <div className="hero min-h-screen" style={{ backgroundImage: `url("${background}")` }}>

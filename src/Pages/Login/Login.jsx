@@ -1,17 +1,20 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import background from '../../assets/others/authentication.png'
 import auth from '../../assets/others/authentication2.png'
 import { FaFacebookF } from 'react-icons/fa';
 import { IoLogoGoogle } from 'react-icons/io';
 import { GoMarkGithub } from 'react-icons/go';
 import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../Provider/AuthProvider';
+import Swal from 'sweetalert2';
 
 const Login = () => {
-    const {githubSignIn, facebookSignIn, googleSignIn, logIn} = useContext(AuthContext)
-    const captchaRef = useRef(null);
+    const { githubSignIn, facebookSignIn, googleSignIn, logIn, resetPass } = useContext(AuthContext)
     const [disabled, setDisabled] = useState(true)
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location?.state?.from?.pathname || '/'
     useEffect(() => {
         loadCaptchaEnginge(6);
     }, [])
@@ -23,16 +26,26 @@ const Login = () => {
         const password = form.password.value;
         // console.log(email, password);
         logIn(email, password)
-        .then(res => {
-            const loggedUser = res.user;
-            console.log(loggedUser);
-        }).catch(error => {
-            console.log('error', error.message);
-        })
+            .then(res => {
+                const loggedUser = res.user;
+                console.log(loggedUser);
+                Swal.fire({
+                    title: 'User Login Successfully',
+                    showClass: {
+                        popup: 'animate__animated animate__fadeInDown'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__fadeOutUp'
+                    }
+                })
+                navigate(from, { replace: true })
+            }).catch(error => {
+                console.log('error', error.message);
+            })
     }
-    const validatereCaptcha = () => {
-        const user_captcha_value = captchaRef.current.value;
-        if (validateCaptcha(user_captcha_value) == true) {
+    const validatereCaptcha = (e) => {
+        const user_captcha_value = e.target.value;
+        if (validateCaptcha(user_captcha_value)) {
             setDisabled(false)
         }
 
@@ -42,30 +55,41 @@ const Login = () => {
     }
     const handleGoogle = () => {
         googleSignIn()
-        .then(res => {
-            const googlelog = res.user;
-            console.log(googlelog);
-        }).catch(error => {
-            console.log('error', error.message);
-        })
+            .then(res => {
+                const googlelog = res.user;
+                console.log(googlelog);
+                navigate(from, { replace: true })
+            }).catch(error => {
+                console.log('error', error.message);
+            })
     }
     const handleFacebook = () => {
         facebookSignIn()
-        .then(res => {
-            const facebooklog = res.user;
-            console.log(facebooklog);
-        }).catch(error =>{
-            console.log('error', error.message);
-        })
+            .then(res => {
+                const facebooklog = res.user;
+                console.log(facebooklog);
+                navigate(from, { replace: true })
+            }).catch(error => {
+                console.log('error', error.message);
+            })
     }
     const handleGithub = () => {
         githubSignIn()
-        .then(res => {
-            const githublog = res.user;
-            console.log(githublog);
-        }).catch(error => {
-            console.log('error', error.message);
-        })
+            .then(res => {
+                const githublog = res.user;
+                console.log(githublog);
+                navigate(from, { replace: true })
+            }).catch(error => {
+                console.log('error', error.message);
+            })
+    }
+    const handleResetPass = () => {
+        resetPass()
+            .then(() => { })
+            .catch((error) => {
+                console.log('error', error.Message);
+            });
+
     }
     return (
         <div className="hero min-h-screen" style={{ backgroundImage: `url("${background}")` }}>
@@ -88,15 +112,13 @@ const Login = () => {
                                 <span className="label-text">Password</span>
                             </label>
                             <input type="password" placeholder="Enter your password" name='password' className="input input-bordered" />
+                            <p onClick={handleResetPass} className="text-sm text-left text-error hover:underline cursor-pointer">Forget Password?</p>
                         </div>
                         <div className="form-control mt-5">
                             < LoadCanvasTemplate />
-                            <div className='text-center'>
-                                <button onClick={validatereCaptcha} className='text-blue-900 text-sm font-bold mt-3'>Validate Captcha</button>
-                            </div>
                         </div>
                         <div className="form-control mt-5">
-                            <input ref={captchaRef} type="text" placeholder="Type here" name='recaptcha' className="input input-bordered" />
+                            <input onBlur={validatereCaptcha} type="text" placeholder="Type here" name='recaptcha' className="input input-bordered" />
                         </div>
                         <input disabled={disabled} className='btn w-full bg-[#DAB884] border-none mt-4' type="submit" value="Sign In" />
                     </form>

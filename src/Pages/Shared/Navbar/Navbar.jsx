@@ -1,8 +1,19 @@
 import { Link, NavLink } from 'react-router-dom';
-import cartIcon from '../../../assets/icon/151-1511569_cart-notifications-free-shopping-cart-favicon-hd-png-removebg-preview.png'
-import { FaUserCircle } from 'react-icons/fa';
+import { FaShoppingCart } from 'react-icons/fa';
+import { useContext } from 'react';
+import { AuthContext } from '../../../Provider/AuthProvider';
+import useCart from '../../../customHooks/useCart';
 
 const Navbar = () => {
+    const { user, logOut } = useContext(AuthContext);
+    const [cart] = useCart()
+    const handleLogout = () => {
+        logOut()
+            .then(() => { })
+            .catch(error => {
+                console.error('error', error.message);
+            })
+    }
     return (
         <div className='container'>
             <div className="navbar fixed z-10 bg-opacity-40  bg-black lg:text-white">
@@ -17,6 +28,11 @@ const Navbar = () => {
                             <li><NavLink to="/dashboard">DASHBOARD</NavLink></li>
                             <li><NavLink to="/menu">OUR MENU</NavLink></li>
                             <li><NavLink to="/shop/salad">OUR SHOP</NavLink></li>
+                            <li><NavLink className='focus:text-yellow-300' to="dashboard/myCart"><div>
+                                <div className="badge badge-xs">+ {cart.length || 0}</div>
+                                <FaShoppingCart className='' size={23}></FaShoppingCart>
+                            </div>
+                            </NavLink></li>
                         </ul>
                     </div>
                     <a className="btn btn-ghost normal-case text-xl">BISTRO BOSS</a>
@@ -29,12 +45,28 @@ const Navbar = () => {
                             <li><Link className='focus:text-yellow-300' to="/dashboard">DASHBOARD</Link></li>
                             <li><Link className='focus:text-yellow-300' to="/menu">OUR MENU</Link></li>
                             <li><Link className='focus:text-yellow-300' to="/shop/salad">OUR SHOP</Link></li>
+                            <li><Link className='focus:text-yellow-300' to="/dashboard/myCart"><div>
+                                <div className="badge badge-xs">+ {cart.length || 0}</div>
+                                <FaShoppingCart className='' size={23}></FaShoppingCart>
+                            </div>
+                            </Link></li>
                         </ul>
                     </div>
-                    <img src={cartIcon} alt="" className='h-6 lg:h-10' />
-                    <Link to="/login"><div className="btn btn-outline uppercase text-white active:text-yellow-600 border-0 hover:bg-transparent">sign in</div></Link>
-                    <FaUserCircle className='text-white text-3xl'></FaUserCircle>
-                    {/* <div className="btn btn-outline uppercase text-white active:text-yellow-600 border-0 hover:bg-transparent">sign out</div> */}
+                    {
+                        !user ?
+                            <Link to="/login"><div className="btn btn-outline uppercase text-white active:text-yellow-600 border-0 hover:bg-transparent">sign in</div></Link> :
+                            <>
+                                <button onClick={handleLogout} className="btn btn-outline uppercase text-white active:text-yellow-600 border-0 hover:bg-transparent">sign out</button>
+                                <div className="tooltip tooltip-bottom" data-tip={user?.displayName}>
+                                    <div className="avatar">
+                                        <div className="w-8 lg:w-14 rounded-full">
+                                            <img src={user?.photoURL} className='' referrerPolicy="no-referrer" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </>
+                    }
+                    {/* <FaUserCircle className='text-white text-3xl'></FaUserCircle> */}
                 </div>
             </div>
         </div>
